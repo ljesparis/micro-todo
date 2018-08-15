@@ -5,12 +5,12 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
 	"github.com/ljesparis/micro-todo/gateway/controllers/tasks"
-	"path"
 )
 
 var template string
