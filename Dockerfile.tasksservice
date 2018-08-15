@@ -1,0 +1,22 @@
+FROM golang:1.10.3-alpine3.8
+
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOARCH=amd64
+
+RUN rm -rf /var/cache/apk/* \
+    && mkdir -p /go/src/github.com/ljesparis/micro-todo/ \
+    && apk add --no-cache git
+
+COPY ./Gopkg.toml /go/src/github.com/ljesparis/micro-todo/Gopkg.toml
+COPY ./Gopkg.lock /go/src/github.com/ljesparis/micro-todo/Gopkg.lock
+COPY ./services /go/src/github.com/ljesparis/micro-todo/services
+
+RUN go get -u github.com/golang/dep/cmd/dep
+
+WORKDIR /go/src/github.com/ljesparis/micro-todo/services/tasks
+
+RUN dep ensure \
+    && go install
+
+CMD tasks

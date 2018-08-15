@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+
+service Tasks {
+	rpc GetOpenedTask(CommonRequest)     returns (GetTaskResponse)  {}
+	rpc GetOpenedTasks(GetTasksRequest)  returns (GetTasksResponse) {}
+	rpc GetClosedTask(CommonRequest)    returns (GetTaskResponse)  {}
+	rpc GetClosedTasks(GetTasksRequest) returns (GetTasksResponse) {}
+	rpc DeleteTask(CommonRequest)      returns (CommonResponse)   {}
+	rpc CreateTask(CreateTaskRequest)  returns (CommonResponse)   {}
+	rpc UpdateTask(UpdateTaskRequest)  returns (CommonResponse)   {}
+}
+
+message Task {
+	int32  id = 1;
+	bool   done = 2;
+	string name = 3;
+	string description = 4;
+}
+
+/////////////////////////////////////////////////////
+// REQUESTS
+/////////////////////////////////////////////////////
+message CommonRequest {
+	int32 id = 1;
+}
+
+message GetTasksRequest {
+	int32 limit = 1;
+	int32 offset = 2;
+	bool  isOpen = 3;
+}
+
+message CreateTaskRequest {
+	string name = 1;
+	string description = 2;
+}
+
+message UpdateTaskRequest {
+	int32 id = 1;
+	string name = 2;
+	string description = 3;
+	bool done = 4;
+}
+////////////////////////////////////////////////////////
+// RESPONSES
+/////////////////////////////////////////////////////
+message CommonResponse {
+	string code = 1;
+	string message = 2;
+}
+
+message GetTaskResponse {
+	Task task = 1;
+}
+
+message GetTasksResponse {
+	repeated Task tasks = 1;
+
+	message ListNode {
+		int32 limit = 1;
+		int32 offset = 2;
+	}
+
+	ListNode next = 2;
+	ListNode prev = 3;
+}

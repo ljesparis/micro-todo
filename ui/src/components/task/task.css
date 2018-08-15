@@ -1,0 +1,18 @@
+#task-cotnainer {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#task-button-close {
+    height: 100%;
+}
+
+#close-button-container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: inherit;
+    margin: inherit;
+}

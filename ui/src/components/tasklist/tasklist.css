@@ -1,0 +1,33 @@
+.card {
+    margin-top: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.card-body {
+    padding-bottom: 0 !important;
+}
+
+.list-group-item {
+    border-top-color: white;
+}
+
+.list-group-item:hover {
+    border-top-color: white;
+    border-bottom-color: white;
+}
+
+.list-group-item:last-child:hover {
+    border-bottom-color: rgba(0, 0, 0, 0.125);
+}
+
+.card-footer:last-child {
+    background-color: transparent;
+}
+
+#next {
+    float: right;
+}
+
+#prev {
+    float: left;
+}

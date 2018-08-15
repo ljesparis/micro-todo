@@ -1,0 +1,75 @@
+version: '3'
+services:
+  dns:
+    image: consul:latest
+    command: agent -dev -client=0.0.0.0 -bind=0.0.0.0
+    container_name: dns
+    ports:
+      - "8500:8500"
+  tasks-service-a:
+    build:
+      context: .
+      dockerfile: Dockerfile.tasksservice
+    restart: always
+    environment:
+      - REGISTRY_ADDRESS=dns:8500
+    container_name: tasks-service-a
+    depends_on:
+      - dns
+    external_links:
+      - dns
+  gatewaya:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    environment:
+      - REGISTRY_ADDRESS=dns:8500
+      - PORT=8000
+    restart: always
+    container_name: gatewaya
+    depends_on:
+      - dns
+    external_links:
+      - dns
+  gatewayb:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    environment:
+      - REGISTRY_ADDRESS=dns:8500
+      - PORT=8001
+    restart: always
+    container_name: gatewayb
+    depends_on:
+      - dns
+    external_links:
+      - dns
+  gatewayc:
+    build:
+      context: .
+      dockerfile: Dockerfile.gateway
+    environment:
+      - PORT=8002
+      - REGISTRY_ADDRESS=dns:8500
+    restart: always
+    container_name: gatewayc
+    depends_on:
+      - dns
+    external_links:
+      - dns
+  loadbalancer:
+    container_name: loadbalancer
+    build:
+      context: .
+      dockerfile: Dockerfile.loadbalancer
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      - gatewaya
+      - gatewayb
+      - gatewayc
+    external_links:
+      - gatewaya
+      - gatewayb
+      - gatewayc

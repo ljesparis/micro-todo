@@ -1,0 +1,13 @@
+#resume-container {
+  padding-top: 1.8rem;
+}
+
+#description-container {
+  padding-top: 2px;
+  height: 82px;
+}
+
+#tasks {
+  max-height: 607.5px;
+  min-height: 607.5px;
+}
