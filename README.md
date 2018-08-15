@@ -10,7 +10,7 @@ Simple todo list microservices example created with:
  * **go-micro**
 
 
-Note: this todo list do not use a database, because the purpose of the example is to prove micro services
+Note: this todo list do not use a database, because the purpose of the example is to prove microservices pattern
 
 
 ## Run
