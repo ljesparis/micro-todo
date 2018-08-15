@@ -7,8 +7,8 @@ import (
 
 	"github.com/gorilla/mux"
 
-	proto "github.com/ljesparis/micro-todo/services/tasks/proto"
 	"github.com/ljesparis/micro-todo/gateway/utils"
+	proto "github.com/ljesparis/micro-todo/services/tasks/proto"
 )
 
 func UpdateTask(writer http.ResponseWriter, request *http.Request) {
@@ -19,7 +19,7 @@ func UpdateTask(writer http.ResponseWriter, request *http.Request) {
 		utils.JsonResponse(writer, code, utils.Response{
 			"message": message,
 		})
-	} ()
+	}()
 
 	id, _ := strconv.ParseInt(mux.Vars(request)["id"], 10, 64)
 

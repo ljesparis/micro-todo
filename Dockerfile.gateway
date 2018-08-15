@@ -3,20 +3,47 @@ FROM golang:1.10.3-alpine3.8
 ENV CGO_ENABLED=0
 ENV GOOS=linux
 ENV GOARCH=amd64
+ENV TEMPLATE_DIR=/go/src/github.com/ljesparis/micro-todo/gateway/templates/
+ENV STATIC_DIR=/go/src/github.com/ljesparis/micro-todo/gateway/ui/
+ENV PUBLIC_URL=/ui
 
 RUN  mkdir -p /go/src/github.com/ljesparis/micro-todo \
-    && apk add --no-cache git \
+    && apk update \
+    && apk add --no-cache --virtual build-dependencies build-base gcc wget git tar make curl nodejs nodejs-npm \
+    && curl -OL https://github.com/google/protobuf/releases/download/v3.6.1/protobuf-all-3.6.1.tar.gz \
+    && tar zxvf protobuf-all-3.6.1.tar.gz \
+    && rm protobuf-all-3.6.1.tar.gz \
+    && cd protobuf-3.6.1 \
+    && ./configure && make -j5 && make install \
+    && rm -rf protobuf-3.6.1 \
+    && go get -u github.com/golang/dep/cmd/dep \
     && rm -rf /var/cache/apk/*
 
 COPY ./Gopkg.toml /go/src/github.com/ljesparis/micro-todo/Gopkg.toml
 COPY ./Gopkg.lock /go/src/github.com/ljesparis/micro-todo/Gopkg.lock
 COPY ./services /go/src/github.com/ljesparis/micro-todo/services
 COPY ./gateway /go/src/github.com/ljesparis/micro-todo/gateway
+COPY ./ui /go/src/github.com/ljesparis/micro-todo/ui
 
-RUN go get -u github.com/golang/dep/cmd/dep
+WORKDIR /go/src/github.com/ljesparis/micro-todo/
 
-WORKDIR /go/src/github.com/ljesparis/micro-todo/gateway
-RUN dep ensure \
+RUN go get -u github.com/golang/protobuf/proto \
+    && go get -u github.com/golang/protobuf/protoc-gen-go \
+    && go get github.com/micro/protoc-gen-micro \
+    && dep ensure -update \
+    && cd services/tasks/proto/ \
+    && protoc --proto_path=$GOPATH/src:. --micro_out=. --go_out=. tasks.proto \
+    && cd ../../../ \
+    && dep ensure -update \
+    && cd ui \
+    && npm i -g yarn \
+    && yarn install \
+    && yarn build \
+    && cp build/index.html ../gateway/templates/index.html \
+    && rm build/index.html \
+    && cp -r build/* ../gateway/ui/ \
+    && rm -rf build/ \
+    && cd ../gateway \
     && go install
 
 CMD gateway

@@ -120,7 +120,6 @@ func GetTask(writer http.ResponseWriter, request *http.Request) {
 		utils.JsonResponse(writer, code, message)
 	}()
 
-
 	tmpOpen := request.URL.Query().Get("isopen")
 	if len(tmpOpen) == 0 {
 		tmpOpen = "true"

@@ -2,11 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/armon/go-metrics"
-  packages = ["."]
-  revision = "3df31a1ada83e310c2e24b267c8e8b68836547b4"
-
-[[projects]]
   name = "github.com/go-log/log"
   packages = [
     ".",
@@ -63,7 +58,8 @@
 [[projects]]
   name = "github.com/hashicorp/serf"
   packages = ["coordinate"]
-  revision = "4b67f2c2b2bb5b748d934a6d48221062e43d2274"
+  revision = "d6574a5bb1226678d7010325fb6c985db20ee458"
+  version = "v0.8.1"
 
 [[projects]]
   branch = "master"
@@ -148,9 +144,10 @@
   revision = "2bca23e0e452137f789efbc8610126fd8b94f73b"
 
 [[projects]]
+  branch = "master"
   name = "github.com/mitchellh/mapstructure"
   packages = ["."]
-  revision = "06020f85339e21b2478f756a78e295255ffa4d6a"
+  revision = "f15292f7a699fcc1a38a80977f80a046874ba8ac"
 
 [[projects]]
   name = "github.com/pborman/uuid"
@@ -184,11 +181,11 @@
     "ipv4",
     "ipv6"
   ]
-  revision = "f9ce57c11b242f0f1599cf25c89d8cb02c45295a"
+  revision = "c39426892332e1bb5ec0a434a079bf82f5d30c54"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "4a96095f9fe2da63b84b1cf65164f347ac8a997ab7fd1f6451979d0191ed4da4"
+  inputs-digest = "08719b2db3be573cb74b2474ad0ae1ed369d95379977ca70419c6923b6fbf9b0"
   solver-name = "gps-cdcl"
   solver-version = 1

@@ -10,11 +10,13 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/ljesparis/micro-todo/gateway/controllers/tasks"
+	"path"
 )
 
 var template string
+
 func init() {
-	f, err := os.Open("./templates/index.html")
+	f, err := os.Open(path.Join(os.Getenv("TEMPLATE_DIR"), "index.html"))
 	if err != nil {
 		panic(err)
 	}
@@ -34,11 +36,12 @@ func Index(writer http.ResponseWriter, _ *http.Request) {
 
 func main() {
 	PORT := os.Getenv("PORT")
-
-	fmt.Println("starting server at 0.0.0.0:", PORT)
+	addr := fmt.Sprintf("0.0.0.0:%s", PORT)
+	fmt.Println(fmt.Sprintf("Starting server at address: %s", addr))
 	r := mux.NewRouter()
 
-	r.PathPrefix("/ui").Handler(http.StripPrefix("/ui/", http.FileServer(http.Dir("./ui/"))))
+	staticDir := os.Getenv("STATIC_DIR")
+	r.PathPrefix("/ui").Handler(http.StripPrefix("/ui/", http.FileServer(http.Dir(staticDir))))
 	r.HandleFunc("/", Index).Methods(http.MethodGet)
 	r.HandleFunc("/create", tasks.CreateTask).Methods(http.MethodPost)
 	r.HandleFunc("/tasks", tasks.AllTasks).Methods(http.MethodGet)
@@ -46,12 +49,11 @@ func main() {
 	r.HandleFunc("/tasks/{id:[0-9]+}/delete", tasks.DeleteTask).Methods(http.MethodDelete)
 	r.HandleFunc("/tasks/{id:[0-9]+}/update", tasks.UpdateTask).Methods(http.MethodPut)
 
-	fmt.Println(http.ListenAndServe("0.0.0.0:"+PORT,
-		handlers.RecoveryHandler()(
-			handlers.LoggingHandler(
-				os.Stdout,
-				r,
+	fmt.Println(
+		http.ListenAndServe(addr,
+			handlers.RecoveryHandler()(
+				handlers.LoggingHandler(os.Stdout, r),
 			),
-		)),
+		),
 	)
 }

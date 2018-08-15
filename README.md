@@ -12,11 +12,10 @@ Simple todo list microservices example created with:
 
 Note: this todo list do not use a database, because the purpose of the example is to prove microservices pattern
 
-
 ## Run
 
 `docker-compose up --build`
 
-
 ## License
+
 [MIT](./LICENSE.txt)
